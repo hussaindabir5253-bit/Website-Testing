@@ -2,5 +2,5 @@
   "name": "Noor Al Maqdis Hardware",
   "description": "Premium industrial tools, general construction hardware, safety equipment, fasteners, and precision engineering instrumentation catalog with an intelligent RFQ inquiry system and interactive 3D technical simulator.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
