@@ -44,7 +44,7 @@
   --text-secondary: #94a3b8 !important;
 }
 
-/* Force consistent text rendering - CRITICAL FIX for mobile browser dark mode issues */
+/* Force consistent text rendering - WHITE TEXT ON DARK BACKGROUNDS */
 .text-white {
   color: #ffffff !important;
 }
@@ -61,28 +61,50 @@
   color: #cbd5e1 !important;
 }
 
-.text-slate-400 {
-  color: #94a3b8 !important;
+/* All slate-400 through slate-900 now use light colors for dark theme */
+.text-slate-400,
+.text-slate-450 {
+  color: #e2e8f0 !important;
 }
 
-.text-slate-500 {
-  color: #64748b !important;
+.text-slate-500,
+.text-slate-550 {
+  color: #f1f5f9 !important;
 }
 
-.text-slate-600 {
-  color: #475569 !important;
+.text-slate-600,
+.text-slate-650 {
+  color: #f8fafc !important;
 }
 
 .text-slate-700 {
-  color: #334155 !important;
+  color: #ffffff !important;
 }
 
-.text-slate-800 {
-  color: #1e293b !important;
+.text-slate-800,
+.text-slate-850,
+.text-slate-855 {
+  color: #ffffff !important;
 }
 
-.text-slate-900 {
-  color: #0f172a !important;
+.text-slate-900,
+.text-slate-905 {
+  color: #ffffff !important;
+}
+
+/* Ensure custom zinc colors are also light for dark theme */
+.text-zinc-400,
+.text-zinc-500 {
+  color: #e2e8f0 !important;
+}
+
+.text-zinc-600,
+.text-zinc-700 {
+  color: #f1f5f9 !important;
+}
+
+.text-zinc-800 {
+  color: #ffffff !important;
 }
 
 .text-yellow-400 {

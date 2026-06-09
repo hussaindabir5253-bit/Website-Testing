@@ -135,111 +135,13 @@ interface UserProfile {
 }
 
 const renderBrandLogo = (brandName: string) => {
-  const norm = brandName.toUpperCase();
-  switch (norm) {
-    case "MILANO":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 25 L16 12 L22 25 L28 12 L34 25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          <text x="44" y="24" fill="currentColor" className="font-sans font-black tracking-widest text-[10px]">MILANO</text>
-          <circle cx="22" cy="7" r="1.5" fill="currentColor" />
-        </svg>
-      );
-    case "RAK CERAMICS":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="8" width="28" height="24" rx="3" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1" />
-          <path d="M10 15 H20 M10 20 H26 M10 25 H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          <text x="38" y="21" fill="currentColor" className="font-sans font-black tracking-widest text-[10px]">RAK</text>
-          <text x="38" y="29" fill="currentColor" className="font-sans text-[5.5px] tracking-tight opacity-80">CERAMICS</text>
-        </svg>
-      );
-    case "GROHE":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="10" y="22" fill="currentColor" className="font-sans font-black tracking-wide text-xs">GROHE</text>
-          <path d="M10 27 C30 31, 70 31, 110 27" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-          <circle cx="106" cy="18" r="1.5" fill="currentColor" />
-        </svg>
-      );
-    case "PHILIPS":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="6" width="20" height="26" rx="3" stroke="currentColor" strokeWidth="1.2" />
-          <path d="M5 13 H25" stroke="currentColor" strokeWidth="1" />
-          <path d="M10 19 A3 3 0 0 1 20 19" stroke="currentColor" strokeWidth="1" />
-          <circle cx="10" cy="24" r="1" fill="currentColor" />
-          <circle cx="20" cy="24" r="1" fill="currentColor" />
-          <text x="32" y="23" fill="currentColor" className="font-sans font-black tracking-widest text-[10px]">PHILIPS</text>
-        </svg>
-      );
-    case "STANLEY":
-      return (
-        <svg className="w-24 h-11 text-slate-900" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="5,8 115,8 110,32 10,32" fill="currentColor" />
-          <text x="18" y="24" fill="#FBBF24" className="font-sans font-black tracking-tighter text-xs italic">STANLEY</text>
-        </svg>
-      );
-    case "HILTI":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="6" width="110" height="28" rx="2" fill="#E11D48" />
-          <text x="22" y="25" fill="currentColor" className="font-sans font-black tracking-tighter text-sm italic">HILTI</text>
-        </svg>
-      );
-    case "HKH":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 8 L24 20 L12 32 L0 20 Z" fill="currentColor" fillOpacity="0.2" />
-          <path d="M6 14 L18 20 L6 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <text x="34" y="24" fill="currentColor" className="font-sans font-black tracking-widest text-xs">HKH</text>
-        </svg>
-      );
-    case "ASMACO":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="18" cy="20" rx="10" ry="10" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
-          <path d="M18 12 C20 16, 18 22, 18 26" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <text x="34" y="24" fill="currentColor" className="font-sans font-black tracking-wide text-[10px]">ASMACO</text>
-        </svg>
-      );
-    case "DR. FIXIT":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 14 L18 7 L31 14 L31 28 L18 35 L5 28 Z" stroke="currentColor" strokeWidth="1.2" />
-          <path d="M9 14 H27" stroke="currentColor" strokeWidth="1" />
-          <text x="36" y="21" fill="currentColor" className="font-sans font-black tracking-tighter text-[9px]">DR. FIXIT</text>
-          <text x="36" y="28" fill="currentColor" className="font-sans text-[5.5px] tracking-tight opacity-75">WATERPROOFING</text>
-        </svg>
-      );
-    case "DULUX":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 20 C10 10, 30 10, 35 20 C35 30, 15 30, 10 20 Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          <path d="M20 20 C20 15, 25 15, 25 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-          <text x="44" y="24" fill="currentColor" className="font-sans font-black tracking-widest text-[10px]">DULUX</text>
-        </svg>
-      );
-    case "NATIONAL PAINTS":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 8 C25 2, 25 22, 42 16" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M12 16 C29 10, 29 30, 46 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          <text x="50" y="21" fill="currentColor" className="font-sans font-black tracking-tighter text-[8px]">NATIONAL</text>
-          <text x="50" y="28" fill="currentColor" className="font-sans font-black text-[6.5px] text-white/80 tracking-widest">PAINTS</text>
-        </svg>
-      );
-    case "VETO":
-      return (
-        <svg className="w-24 h-11 text-white" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="18" cy="20" r="10" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M18 12 L14 21 H22 L18 28" fill="currentColor" />
-          <text x="34" y="24" fill="currentColor" className="font-sans font-black tracking-widest text-xs">VETO</text>
-        </svg>
-      );
-    default:
-      return <span className="font-sans font-black text-[10px] uppercase tracking-wide">{brandName}</span>;
-  }
+  // Use simple text-based branding instead of fake SVG logos
+  const displayName = brandName.toUpperCase();
+  return (
+    <span className="font-sans font-black text-xs tracking-tight uppercase text-white">
+      {displayName}
+    </span>
+  );
 };
 
 export default function App() {
