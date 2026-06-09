@@ -11,4 +11,234 @@
   --color-slate-450: #64748b;
   --color-slate-350: #cbd5e1;
   --color-slate-250: #e2e8f0;
+  --color-slate-550: #64748b;
+  --color-slate-650: #475569;
+  --color-slate-855: #1a2332;
+  --color-slate-905: #0d1117;
+  --color-yellow-405: #facc15;
+  --color-yellow-450: #eab308;
+  --color-yellow-550: #ca8a04;
+  --color-yellow-605: #a16207;
+  --color-yellow-650: #854d0e;
+  --color-amber-450: #f59e0b;
+  --color-amber-950: #451a03;
+  --color-emerald-405: #10b981;
+  --color-red-955: #450a0a;
+}
+
+/* Lock text colors for consistency across all viewports and dark modes */
+:root {
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-accent: #facc15;
+  --text-error: #ef4444;
+  --text-success: #10b981;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+}
+
+.dark {
+  --text-primary: #f8fafc !important;
+  --text-secondary: #94a3b8 !important;
+}
+
+/* Force consistent text rendering - CRITICAL FIX for mobile browser dark mode issues */
+.text-white {
+  color: #ffffff !important;
+}
+
+.text-slate-100 {
+  color: #f1f5f9 !important;
+}
+
+.text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+.text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+.text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.text-slate-500 {
+  color: #64748b !important;
+}
+
+.text-slate-600 {
+  color: #475569 !important;
+}
+
+.text-slate-700 {
+  color: #334155 !important;
+}
+
+.text-slate-800 {
+  color: #1e293b !important;
+}
+
+.text-slate-900 {
+  color: #0f172a !important;
+}
+
+.text-yellow-400 {
+  color: #facc15 !important;
+}
+
+.text-yellow-500 {
+  color: #eab308 !important;
+}
+
+.text-yellow-600 {
+  color: #ca8a04 !important;
+}
+
+.text-emerald-400 {
+  color: #34d399 !important;
+}
+
+.text-emerald-500 {
+  color: #10b981 !important;
+}
+
+.text-red-400 {
+  color: #f87171 !important;
+}
+
+.text-red-500 {
+  color: #ef4444 !important;
+}
+
+.text-blue-400 {
+  color: #60a5fa !important;
+}
+
+.text-blue-500 {
+  color: #3b82f6 !important;
+}
+
+.text-orange-400 {
+  color: #fb923c !important;
+}
+
+.text-orange-500 {
+  color: #f97316 !important;
+}
+
+.text-teal-400 {
+  color: #2dd4bf !important;
+}
+
+.text-teal-500 {
+  color: #14b8a6 !important;
+}
+
+.text-indigo-400 {
+  color: #818cf8 !important;
+}
+
+.text-indigo-500 {
+  color: #6366f1 !important;
+}
+
+.text-amber-400 {
+  color: #fbbf24 !important;
+}
+
+.text-amber-500 {
+  color: #f59e0b !important;
+}
+
+/* Smooth scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Hardware-accelerated animations */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scrollbar hide utility */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Transform optimizations for 3D */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Mobile menu overlay - full height scrollable */
+.mobile-menu-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Ensure mobile menu doesn't block body scroll when closed */
+body.menu-open {
+  overflow: hidden;
 }

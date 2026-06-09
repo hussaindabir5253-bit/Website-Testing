@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 
 const app = express();
 const PORT = 3000;
@@ -13,7 +12,7 @@ app.use(express.json());
 const DB_FILE = path.join(process.cwd(), "inquiries_store.json");
 
 // Helper to read database
-function readInquiries() {
+function readInquiries(): any[] {
   try {
     if (fs.existsSync(DB_FILE)) {
       const data = fs.readFileSync(DB_FILE, "utf-8");
@@ -34,7 +33,7 @@ function writeInquiries(data: any[]) {
   }
 }
 
-// Initialize inquiries database if empty
+// Initialize inquiries database with mock data
 if (!fs.existsSync(DB_FILE)) {
   writeInquiries([
     {
@@ -50,44 +49,36 @@ if (!fs.existsSync(DB_FILE)) {
       items: [
         {
           product: {
-            id: "fs-bolt-09",
-            name: "High-Tensile Structural Heavy Hex Flange Bolt",
-            model: "NMQ-FB-109",
-            category: "fasteners-hardware",
-            brand: "NoorAlMaqdis-Premium",
-            description: "High tensile structural engineering bolts with built-in hexagonal flange interfaces.",
-            iconType: "screw",
-            material: "Grade 10.9 Medium Carbon Steel Alloy",
-            popularityRating: 97,
-            specs: [
-              { label: "Thread Size", value: "M16 Pitch 2.0" },
-              { label: "Tensile Strength", value: "1040 MPa minimum" }
-            ]
+            id: "pow-stanley-grinder",
+            name: "Stanley Professional Heavy Angle Grinder",
+            model: "STN-SG-850",
+            category: "power-tools",
+            brand: "Stanley Power tools",
+            description: "Highly robust 850W angle grinder with dense steel gears.",
+            iconType: "drill",
+            material: "Cast Alloy Gearcase",
+            popularityRating: 96
           },
           quantity: 2500,
-          notes: "Need hot-dip galvanized finish rather than standard black oxide if possible."
+          notes: "Need hot-dip galvanized finish."
         },
         {
           product: {
-            id: "fs-anchor-10",
-            name: "Stainless Steel SS316 Heavy Wedge Anchor",
-            model: "NMQ-WA-316",
-            category: "fasteners-hardware",
-            brand: "HILTI Structural",
-            description: "Premium through-fixture metal expansion anchors.",
-            iconType: "screw",
-            material: "Marine Grade 316 Stainless Steel (A4)",
-            popularityRating: 93,
-            specs: [
-              { label: "Anchor Diameter", value: "M12" },
-              { label: "Embedment Depth", value: "85 mm" }
-            ]
+            id: "pow-hilti-hammer-drill",
+            name: "Hilti TE-30 High-Performance SDS Rotary Hammer",
+            model: "HLT-TE-30-AVR",
+            category: "power-tools",
+            brand: "Hilti",
+            description: "Most powerful SDS rotary hammer in its class.",
+            iconType: "drill",
+            material: "Heavy Steel Alloy Drive",
+            popularityRating: 99
           },
           quantity: 1200,
-          notes: "Seawater application - S316 is a hard mandate."
+          notes: "Seawater application - S316 materials needed."
         }
       ],
-      timestamp: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(), // 36 hours ago
+      timestamp: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(),
       status: "reviewed"
     },
     {
@@ -99,51 +90,28 @@ if (!fs.existsSync(DB_FILE)) {
       projectDeadline: "2026-06-30",
       projectLocation: "Mussafah ICAD I, Abu Dhabi",
       urgency: "medium",
-      comments: "Request quote for welder inverter and auto darkening masks for our shipyard expansion project.",
+      comments: "Request quote for welding equipment for our shipyard expansion project.",
       items: [
         {
           product: {
-            id: "wl-welder-11",
-            name: "IGBT Dual-Voltage Pro Inverter Arc Welder",
-            model: "NMQ-MMA-200D",
-            category: "welding-equipment",
-            brand: "NoorAlMaqdis-Premium",
-            description: "Advanced MMA/SMAW and lift TIG inverter welding appliance.",
+            id: "elec-led-panel-60x60",
+            name: "Philips Pro LED Panel Light 60x60",
+            model: "PHL-PL-6060",
+            category: "electrical",
+            brand: "Philips",
+            description: "High-spec 40W architectural LED lay-in panel light.",
             iconType: "welder",
-            material: "Powder Coated Steel / Copper Core Transformer",
-            popularityRating: 95,
-            specs: [
-              { label: "Output Current Range", value: "20 - 200 Amperes" }
-            ]
+            material: "Extruded Aluminum Frame",
+            popularityRating: 98
           },
           quantity: 15,
           notes: "Standard warranty support info requested."
         }
       ],
-      timestamp: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(), // 10 hours ago
+      timestamp: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(),
       status: "pending"
     }
   ]);
-}
-
-// Lazy load Gemini API
-let aiClient: GoogleGenAI | null = null;
-function getGeminiClient(): GoogleGenAI {
-  if (!aiClient) {
-    const key = process.env.GEMINI_API_KEY;
-    if (!key) {
-      throw new Error("GEMINI_API_KEY environment variable is not configured. Please add it in the secrets settings.");
-    }
-    aiClient = new GoogleGenAI({
-      apiKey: key,
-      httpOptions: {
-        headers: {
-          "User-Agent": "aistudio-build",
-        },
-      },
-    });
-  }
-  return aiClient;
 }
 
 // -----------------------------------------------------------------------------
@@ -159,7 +127,6 @@ app.get("/api/health", (req, res) => {
 app.get("/api/inquiries", (req, res) => {
   try {
     const inqs = readInquiries();
-    // Sort youngest first
     inqs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     res.json(inqs);
   } catch (error: any) {
@@ -170,17 +137,7 @@ app.get("/api/inquiries", (req, res) => {
 // Save a new inquiry (RFQ basket)
 app.post("/api/inquiries", (req, res) => {
   try {
-    const {
-      companyName,
-      contactPerson,
-      email,
-      phone,
-      projectDeadline,
-      projectLocation,
-      urgency,
-      comments,
-      items,
-    } = req.body;
+    const { companyName, contactPerson, email, phone, projectDeadline, projectLocation, urgency, comments, items } = req.body;
 
     if (!companyName || !contactPerson || !email || !phone || !items || !items.length) {
       return res.status(400).json({ error: "Missing required contact details or basket items." });
@@ -240,96 +197,21 @@ app.patch("/api/inquiries/:id", (req, res) => {
 // Reset inquiries (Utility)
 app.post("/api/inquiries/reset", (req, res) => {
   try {
-    fs.unlinkSync(DB_FILE);
+    if (fs.existsSync(DB_FILE)) {
+      fs.unlinkSync(DB_FILE);
+    }
     res.json({ success: true, message: "Inquiry database reset successfully." });
   } catch (e) {
     res.json({ success: true, message: "No database to clear." });
   }
 });
 
-// intelligent AI assistant proxy
-app.post("/api/assistant/chat", async (req, res) => {
-  try {
-    const { message, history } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ error: "Message content cannot be blank." });
-    }
-
-    // Check if key is set
-    if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "MY_GEMINI_API_KEY") {
-      return res.json({
-        reply: "Hello! I am **Noor Al Maqdis's AI Engineering Assistant**. Currently, my AI brain requires a Gemini API key to query deep industrial standards, ANSI/DIN parameters, and make technical catalog mapping calls.\n\n*To enable me instantly, please insert your personal Gemini API key in **Settings > Secrets** panel in the AI Studio environment.* \n\nIn the meantime, I can advise you standard mechanical engineering fundamentals: Chrome Vanadium Steel (Cr-V) is standard for spanners with high fatigue limit, while M35 Cobalt bits are superior for drilling high-grade stainless steels because cobalt prevents thermal friction annealing up to 600°C!"
-      });
-    }
-
-    const client = getGeminiClient();
-
-    const systemPrompt = `You are "AI Technical Engineering Specialist" for NOOR AL MAQDIS HARDWARE & ELECTRIC (A leading supplier associated with premium industrial equipment, sanitary mixers, RAK Ceramics WCs, Philips LEDs, Stanley power/hand tools, Hilti hammers, Asmaco silicone sealants, National Paints, and Dr. Fixit waterproofing).
-Your job is to assist engineers, marine suppliers, construction contractors, purchasing managers, and general technicians with technical inquiries. Recommend matching products, materials, and technical specifications from our catalog.
-
-CRITICAL INSTRUCTIONS FOR CONCISENESS & SPEED:
-- Be extremely smart, direct, and efficient.
-- Provide SHORT, PRECISE, and CONCISE answers (max 2 short paragraphs or 3-4 bullet points absolute maximum).
-- Avoid fluff, excessive greetings, polite preambles, or general conversational filler. Resolve the user's inquiry with high-density technical accuracy instantly.
-
-Our Product Catalog includes:
-1. "Milano Premium Shower Mixer" (Model: MLN-SM-404, Brass, WRAS Approved)
-2. "Milano Luxury Basin Mixer" (Model: MLN-BM-202, Chrome, Single lever)
-3. "Milano Flexible Sink Kitchen Mixer" (Model: MLN-KM-303, Braided SS304)
-4. "RAK Ceramics Standing WC Suite" (Model: RAK-WC-STD, Vitreous china, Dual flush)
-5. "RAK Ceramics Elegant Hand Basin" (Model: RAK-HB-EL, Vitreous glazes)
-6. "RAK Ceramics RK Series WC Suite" (Model: RAK-WC-RK9, Rimless, Rimless jet)
-7. "RAK Ceramics RK Wash Basin" (Model: RAK-WB-RK9, Fireclay ceramics)
-8. "Philips Pro LED Panel Light 60x60" (Model: PHL-PL-6060, 40W, 120 lm/W)
-9. "Centrifugal Ceiling Ventilation Fan 60x60" (Model: NMQ-CF-6060, ABS Stator)
-10. "Stanley Professional Heavy Angle Grinder" (Model: STN-SG-850, 850W, 100mm disc)
-11. "Hilti TE-30 High-Performance SDS Rotary Hammer" (Model: HLT-TE-30-AVR, AVR dampening)
-12. "Stanley FatMax Aviation Snip Cutter" (Model: STN-FM-14563, Cr-Mo blades)
-13. "Asmaco GP Silicone Sealant Clear" (Model: ASM-GP-CLR, Acetic cure siloxane)
-14. "Dr. Fixit Pidiproof LW+ Waterproofing Liquid" (Model: FIX-LW-PEDI, Admixture compound)
-15. "Dr. Fixit Polyurethane PU Sealant" (Model: FIX-PU-SEAL, 25LM expansion)
-16. "Dulux WeatherShield Premium Exterior Paint" (Model: DLX-WS-EXT, 10-yr latex)
-17. "National Paints Synthetic Gloss Enamel Paint" (Model: NAT-SYN-GLS, Alkyd, 7kg/10kg)
-18. "National Paints Industrial Self-Leveling Epoxy Flooring" (Model: NAT-EPX-FLOOR, 2-pack)
-
-Refer explicitly to products from our catalog when relevant, and suggest adding them to their RFQ Inquiry Basket. Keep the tone professional, helpful, and highly accurate. Keep answers formatted in highly clean Markdown.`;
-
-    // Package conversation history
-    const contents: any[] = [];
-    if (history && Array.isArray(history)) {
-      history.forEach((msg: any) => {
-        contents.push({
-          role: msg.role === "user" ? "user" : "model",
-          parts: [{ text: msg.text }]
-        });
-      });
-    }
-    contents.push({ role: "user", parts: [{ text: message }] });
-
-    const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: contents,
-      config: {
-        systemInstruction: systemPrompt,
-        temperature: 0.7,
-      },
-    });
-
-    const reply = response.text || "I was unable to complete the response. Please check back shortly.";
-    res.json({ reply });
-  } catch (error: any) {
-    console.error("Gemini API assistant error:", error);
-    res.json({
-      reply: `I encountered an unexpected error when processing your intelligent assistance query. Let me respond locally: 
-
-For stainless-steel fastener configurations, always avoid linking them to bare carbon steel in outdoor structural settings, as galvanic potential indices differ by over 0.15V, accelerating structural corrosion of the carbon flange plate. Recommend using hot-dip zinc insulation layer or selecting Stainless A4/316 matching flanges.
-
-*(Technical Error details: ${error.message || "Unknown error contact system administrator"})*`
-    });
-  }
+// AI Assistant endpoint - returns info that local AI is now used
+app.post("/api/assistant/chat", (req, res) => {
+  res.json({
+    reply: "The AI assistant now runs 100% locally in your browser for instant responses. No server API calls are needed. Ask me about products, specifications, certifications, or applications!"
+  });
 });
-
 
 // -----------------------------------------------------------------------------
 // VITE AND ASSETS STATIC ROUTING
@@ -337,14 +219,14 @@ For stainless-steel fastener configurations, always avoid linking them to bare c
 
 async function initializeServer() {
   if (process.env.NODE_ENV !== "production") {
-    console.log("Starting server in DEVELOPMENT MODE. Loading Vite dev middleware.");
+    console.log("Starting Noor Al Maqdis server in DEVELOPMENT MODE.");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
-    console.log("Starting server in PRODUCTION MODE. Serving static files.");
+    console.log("Starting Noor Al Maqdis server in PRODUCTION MODE.");
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
@@ -353,7 +235,7 @@ async function initializeServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`NOOR AL MAQDIS HARDWARE Server boot. Running dynamically at http://localhost:${PORT}`);
+    console.log(`NOOR AL MAQDIS HARDWARE Server running at http://localhost:${PORT}`);
   });
 }
 

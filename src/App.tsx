@@ -645,7 +645,9 @@ export default function App() {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 shadow-xl z-50 space-y-1">
+              <div
+                id="mobile-menu-overlay"
+                className="absolute right-0 mt-2 w-56 max-h-[80vh] overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 shadow-xl z-50 space-y-1 animate-scale-in origin-top-right">
                 {/* Corporate Navigation Sections */}
                 <div className="border-b border-slate-100 dark:border-slate-850 pb-1.5 mb-1.5 space-y-0.5">
                   <span className="px-3 py-1 font-mono text-[9px] text-slate-450 dark:text-slate-500 uppercase tracking-widest font-black block">
@@ -860,48 +862,49 @@ export default function App() {
                 </div>
               </div>
 
-              {/* ================== DYNAMIC 16 BRAND LOGOS COLLAGE (MATCHING IMAGE) ================== */}
+              {/* ================== DYNAMIC 12 BRAND LOGOS COLLAGE ================== */}
               <div className="space-y-6">
-                <div className="text-center space-y-1">
-                  <span className="font-mono text-[10px] text-yellow-600 dark:text-yellow-400 uppercase font-black tracking-widest block">
+                <div className="text-center space-y-1 animate-slide-up">
+                  <span className="font-mono text-[10px] text-yellow-400 uppercase font-black tracking-widest block">
                     MANUFACTURER BRAND ROSTER
                   </span>
-                  <h3 className="font-sans font-black text-2xl sm:text-3.5xl tracking-tight text-slate-900 dark:text-white uppercase italic">
+                  <h3 className="font-sans font-black text-2xl sm:text-3xl tracking-tight text-white uppercase">
                     Our Associated Brands Portfolio
                   </h3>
-                  <p className="text-xs text-slate-500 max-w-xl mx-auto leading-relaxed">
-                    Noor Al Maqdis is proud to stock, import, and distribute genuine parts from these 16 premier, internationally recognized hardware, adhesive, paint, and power tool brands.
+                  <p className="text-xs text-slate-400 max-w-xl mx-auto leading-relaxed">
+                    Noor Al Maqdis is proud to stock, import, and distribute genuine parts from these 12 premier, internationally recognized hardware, adhesive, paint, and power tool brands.
                   </p>
                 </div>
 
-                {/* 3D Hovering Brand Panels Frame */}
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                  {TRUST_BRANDS.map((br) => (
+                {/* Brand Panels Grid - Fixed symmetrical 6x2 layout */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                  {TRUST_BRANDS.map((br, index) => (
                     <div
                       key={br.name}
                       onClick={() => {
                         setSelectedBrand(br.name);
                         setActiveTab("catalog");
                       }}
-                      className={`p-4 rounded-2xl border flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-lg ${
-                        theme === "dark" 
-                          ? "bg-slate-900 border-slate-850 hover:border-yellow-400" 
-                          : "bg-white border-slate-200 hover:border-yellow-500"
+                      className={`p-4 rounded-2xl border flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-yellow-400 animate-fade-in ${
+                        theme === "dark"
+                          ? "bg-slate-900 border-slate-800"
+                          : "bg-white border-slate-200"
                       }`}
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      {/* Premium Dynamic Graphic Inline SVG Logo representing the manufacturer brand */}
-                      <div className={`w-full py-2 px-1 rounded-xl text-center font-sans font-black tracking-tighter text-xs text-white uppercase bg-gradient-to-r ${br.color} shadow-sm overflow-hidden flex items-center justify-center min-h-[52px]`}>
+                      {/* Brand Logo Container */}
+                      <div className={`w-full py-3 px-1 rounded-xl text-center font-sans font-black tracking-tighter text-xs text-white uppercase bg-gradient-to-r ${br.color} shadow-sm overflow-hidden flex items-center justify-center min-h-[52px] transitions-all duration-300 hover:scale-105`}>
                         {renderBrandLogo(br.name)}
                       </div>
 
                       <div className="mt-3 space-y-1">
-                        <span className="font-sans font-extrabold text-[10px] tracking-tight text-slate-900 dark:text-white block truncate w-24">
+                        <span className="font-sans font-extrabold text-[10px] tracking-tight text-white block truncate w-24">
                           {br.name}
                         </span>
                         <span className="font-mono text-[8.5px] text-slate-400 block line-clamp-1">
                           {br.category}
                         </span>
-                        <span className="font-mono text-[8px] text-yellow-500 block">
+                        <span className="font-mono text-[8px] text-yellow-400 block">
                           {br.rating}
                         </span>
                       </div>
@@ -910,38 +913,42 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Core Corporate Strengths Cards */}
+              {/* Core Corporate Strengths Cards with animations */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[
                   {
                     title: "Quality Products Assured",
                     desc: "Genuine and authentic tools only. We source directly from brands such as Dongcheng and HKK so you never compromise on the performance, safety, and durability of your site components.",
-                    icon: <ShieldCheck className="w-7 h-7 text-yellow-600 dark:text-yellow-400" />
+                    icon: <ShieldCheck className="w-7 h-7 text-yellow-400" />,
+                    delay: "0ms"
                   },
                   {
                     title: "Competitive Local Pricing",
                     desc: "We understand industry needs. Offering contractors trade-grade pricing matrices on hex bolts, anchors, and electrical boards to guarantee cost efficiency inside your budgets.",
-                    icon: <Scale className="w-7 h-7 text-teal-600 dark:text-teal-400" />
+                    icon: <Scale className="w-7 h-7 text-teal-400" />,
+                    delay: "100ms"
                   },
                   {
                     title: "Professional UAE Support",
                     desc: "Owned and operated by three brothers—Hakimuddin, Mustafa, and Shabbir Hamid. We run outstanding responsive customer support, building strong, reliable partnerships for years to come.",
-                    icon: <Award className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+                    icon: <Award className="w-7 h-7 text-indigo-400" />,
+                    delay: "200ms"
                   }
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className={`p-6 rounded-3xl border transition-all hover:shadow-md ${
-                      theme === "dark" ? "bg-slate-900 border-slate-850" : "bg-white border-slate-200"
+                    className={`p-6 rounded-3xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up ${
+                      theme === "dark" ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
                     }`}
+                    style={{ animationDelay: item.delay }}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-yellow-400/10 mb-4 flex items-center justify-center shadow-inner">
+                    <div className="w-12 h-12 rounded-xl bg-yellow-400/10 mb-4 flex items-center justify-center shadow-inner hover:bg-yellow-400/20 transition-colors">
                       {item.icon}
                     </div>
-                    <h4 className="font-sans font-bold text-slate-900 dark:text-white mb-2 text-md uppercase">
+                    <h4 className="font-sans font-bold text-white mb-2 text-md uppercase">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
